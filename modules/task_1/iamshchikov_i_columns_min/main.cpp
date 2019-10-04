@@ -38,25 +38,31 @@ TEST(Parallel_Operations_MPI, find_min_in_row) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     const int m = 1, n = 6;
+    std::vector<int> res;
+    std::vector <std::vector<int> > matrix(m);
+    std::vector <std::vector<int> >* pmatrix = &matrix;
     if (rank == 0) {
-        std::vector <std::vector<int> > matrix(m);
-        std::vector <std::vector<int> >* pmatrix = &matrix;
         getRandomMatrix(pmatrix, n);
-        ASSERT_EQ(getMinElementsSequential(pmatrix, m, n),
-                  getMinElementsParallel(pmatrix, m, n));
+    }
+    res = getMinElementsParallel(pmatrix, m, n);
+    if (rank == 0) {
+        ASSERT_EQ(getMinElementsSequential(pmatrix, m, n), res);
     }
 }
 
 TEST(Parallel_Operations_MPI, find_min_in_col) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    const int m = 5, n = 1;
+    const int m = 6, n = 1;
+    std::vector<int> res;
+    std::vector <std::vector<int> > matrix(m);
+    std::vector <std::vector<int> >* pmatrix = &matrix;
     if (rank == 0) {
-        std::vector <std::vector<int> > matrix(m);
-        std::vector <std::vector<int> >* pmatrix = &matrix;
         getRandomMatrix(pmatrix, n);
-        ASSERT_EQ(getMinElementsSequential(pmatrix, m, n),
-                  getMinElementsParallel(pmatrix, m, n));
+    }
+    res = getMinElementsParallel(pmatrix, m, n);
+    if (rank == 0) {
+        ASSERT_EQ(getMinElementsSequential(pmatrix, m, n), res);
     }
 }
 
@@ -64,12 +70,15 @@ TEST(Parallel_Operations_MPI, find_mins_in_matrix) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     const int m = 5, n = 6;
+    std::vector<int> res;
+    std::vector <std::vector<int> > matrix(m);
+    std::vector <std::vector<int> >* pmatrix = &matrix;
     if (rank == 0) {
-        std::vector <std::vector<int> > matrix(m);
-        std::vector <std::vector<int> >* pmatrix = &matrix;
         getRandomMatrix(pmatrix, n);
-        ASSERT_EQ(getMinElementsSequential(pmatrix, m, n),
-                  getMinElementsParallel(pmatrix, m, n));
+    }
+    res = getMinElementsParallel(pmatrix, m, n);
+    if (rank == 0) {
+        ASSERT_EQ(getMinElementsSequential(pmatrix, m, n), res);
     }
 }
 
