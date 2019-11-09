@@ -4,6 +4,7 @@
 #include <ctime>
 #include "../../../modules/task_1/iamshchikov_i_columns_min/columns_min.h"
 
+
 void getRandomMatrix(std::vector<int>* matrix, int n, int m) {
     if (n > 0 &&  m > 0 ) {
         std::mt19937 gen;
