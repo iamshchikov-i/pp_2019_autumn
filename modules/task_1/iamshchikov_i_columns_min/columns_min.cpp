@@ -5,7 +5,7 @@
 #include "../../../modules/task_1/iamshchikov_i_columns_min/columns_min.h"
 
 void getRandomMatrix(std::vector<int>* matrix, int n, int m) {
-    if (n > 0 && m > 0 ) {
+    if (n > 0 && m > 0) {
         std::mt19937 gen;
         gen.seed(static_cast<unsigned int>(time(0)));
         for (int i = 0; i < m*n; ++i)
