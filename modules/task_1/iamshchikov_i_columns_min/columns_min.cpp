@@ -5,10 +5,10 @@
 #include "../../../modules/task_1/iamshchikov_i_columns_min/columns_min.h"
 
 void getRandomMatrix(std::vector<int>* matrix, int n, int m) {
-    if (n > 0 &&  m > 0 ) {
+    if (n > 0 && m > 0 ) {
         std::mt19937 gen;
         gen.seed(static_cast<unsigned int>(time(0)));
-        for (size_t i = 0; i < m*n; ++i)
+        for (int i = 0; i < m*n; ++i)
             matrix->push_back(gen() % 100);
     } else {
          throw - 1;
@@ -85,7 +85,6 @@ void setDispl(std::vector<int>* elem_displ, std::vector<int>* elem_count,
 std::vector<int> getMinElementsSequential(
                  const std::vector<int>* matrix,
                  int row_num, int col_num) {
-    int min;
     std::vector<int> res(col_num);
     std::vector<int> matrix_in_row(col_num*row_num);
     std::vector<int>* pmatrix_in_row = &matrix_in_row;
@@ -117,7 +116,7 @@ std::vector<int> getMinElementsParallel(
     involved_proc_num = getInvolvedProcNumber(n, ProcNum);
     if (ProcRank == 0) {
         transposeMatrix(matrix, ptransposed_matrix, m, n);
-	}
+    }
     if (involved_proc_num < ProcNum) {
         MPI_Comm_group(MPI_COMM_WORLD, &group_world);
         for (int i = 0; i < involved_proc_num; ++i)
