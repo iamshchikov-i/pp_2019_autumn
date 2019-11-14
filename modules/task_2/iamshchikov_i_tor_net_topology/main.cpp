@@ -119,18 +119,20 @@ TEST(torus_network_topology, can_send) {
     std::vector<int> data(size), dims(ndims);
     std::vector<int>* pdata = &data;
     MPI_Comm_size(MPI_COMM_WORLD, &procnum);
-    if(procnum != 1) {
+    if (procnum != 1) {
         MPI_Dims_create(procnum, ndims, dims.data());
         MPI_Comm comm_cart = createTorusTopology(dims, MPI_COMM_WORLD);
         MPI_Comm_rank(comm_cart, &procrank);
         root = 0; dest = procnum-1;
-        if (procrank == root)
-            for (size_t i = 0;i < pdata->size(); ++i)
+        if (procrank == root) {
+            for (size_t i = 0; i < pdata->size(); ++i)
                 pdata->at(i) = i * i;
+        }
 
-        if(procrank == dest && dest != root)
-            for(int i = 0; i < size; ++i)
-	            ASSERT_EQ(0, pdata->at(i));
+        if (procrank == dest && dest != root) {
+            for (int i = 0; i < size; ++i)
+                ASSERT_EQ(0, pdata->at(i));
+        }
 
         send(pdata, count, MPI_INT, root, dest, dims, comm_cart);
 

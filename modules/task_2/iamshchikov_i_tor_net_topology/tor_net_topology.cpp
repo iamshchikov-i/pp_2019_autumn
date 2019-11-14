@@ -53,16 +53,15 @@ int getDirection(int coord_source, int coord_dest, int dim_size) {
             return delta;
         else
             return -delta;
-    }
-
-    else if (coord_source > coord_dest) {
+    } else if (coord_source > coord_dest) {
         delta = coord_source - coord_dest;
         if (delta <= half)
             return -delta;
         else
             return delta;
+    } else {
+        throw -2;
     }
-    else throw -2;
 }
 
 int getStep(int dir) {
@@ -108,12 +107,12 @@ std::vector<int> getTransit(int root, int dest, std::vector<int> dims,
                                         getStep(steps), comm_cart);
                 if (procrank == next_dest)
                     transit.push_back(curr_source);
-                else if(procrank == curr_source)
+                else if (procrank == curr_source)
                     transit.push_back(next_dest);
                 route.push_back(next_dest);
                 curr_source = next_dest;
             }
-        }	
+        }
     }
     return transit;
 }
