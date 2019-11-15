@@ -140,7 +140,7 @@ TEST(torus_network_topology, can_send) {
         if (procrank == dest) {
             ASSERT_EQ(count, pdata->size());
             for (size_t i = 0; i < count; ++i)
-                ASSERT_EQ(i*i, pdata->at(i));
+                ASSERT_EQ(static_cast<int>(i*i), pdata->at(i));
         }
     }
 }
