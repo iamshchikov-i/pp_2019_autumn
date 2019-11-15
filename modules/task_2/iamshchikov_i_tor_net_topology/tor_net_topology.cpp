@@ -132,7 +132,7 @@ void send(std::vector<int>* pdata, int count, MPI_Datatype datatype,
     MPI_Comm_size(MPI_COMM_WORLD, &procnum);
     MPI_Comm_rank(MPI_COMM_WORLD, &procrank);
 
-    if (procrank != root && pdata->size() != count)
+    if (procrank != root && pdata->size() != static_cast<size_t>(count))
         pdata->resize(count);
 
     if (root != dest) {
