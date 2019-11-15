@@ -4,6 +4,7 @@
 
 #include <mpi.h>
 #include <vector>
+#include <cstdlib>
 
 int getNodenumInNetworkTopology(const std::vector<int> dims);
 MPI_Comm createTorusTopology(const std::vector<int> dims,
