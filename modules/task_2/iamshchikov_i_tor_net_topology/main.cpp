@@ -115,7 +115,8 @@ TEST(torus_network_topology, throw_when_try_send_in_null_comm) {
 }
 
 TEST(torus_network_topology, can_send) {
-    int procrank, procnum, root, dest, ndims = 2, size = 10, count = 6;
+    int procrank, procnum, root, dest, ndims = 2, size = 10;
+    size_t count = 6;
     std::vector<int> data(size), dims(ndims);
     std::vector<int>* pdata = &data;
     MPI_Comm_size(MPI_COMM_WORLD, &procnum);
