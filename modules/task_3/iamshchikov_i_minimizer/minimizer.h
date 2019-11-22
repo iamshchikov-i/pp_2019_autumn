@@ -47,14 +47,14 @@ class One_Dimensional_Minimizer {
  protected:
     std::map<double, characteristics>::iterator left_point;
     std::map<double, characteristics>::iterator right_point;
-    double r_p;
-    int N_max;
-    double eps;
     result res;
     double a;
     double b;
     double curr_x;
     double(*function) (double _x, double _y);
+    double eps;
+    int N_max;
+    double r_p;
     double min_interval_length;
     double m;
     double M_Max;
@@ -89,9 +89,9 @@ class One_Dimensional_Minimizer {
 class Minimizer : public One_Dimensional_Minimizer {
  private:
     bool valIsMin;
-    double(*function) (double _x, double _y);
     double curr_y;
     double upper_y;
+    double(*function) (double _x, double _y);
     int procrank;
     int procnum;
     void do_first_iteration(One_Dimensional_Minimizer* odm, result* tmp_res);

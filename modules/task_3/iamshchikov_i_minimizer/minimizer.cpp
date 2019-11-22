@@ -1,5 +1,7 @@
 // Copyright 2019 Iamshchikov Ivan
 
+#include <map>
+#include <queue>
 #include <utility>
 #include <vector>
 #include "../../../modules/task_3/iamshchikov_i_minimizer/minimizer.h"
@@ -39,7 +41,7 @@ void One_Dimensional_Minimizer::go_new_left_interval(double new_point) {
 }
 
 double One_Dimensional_Minimizer::get_M() {
-    return abs(((*right_point).second.z - (*left_point).second.z) /
+    return std::abs(((*right_point).second.z - (*left_point).second.z) /
                     ((*right_point).first - (*left_point).first));
 }
 
@@ -55,7 +57,7 @@ double One_Dimensional_Minimizer::get_m() {
 
 double One_Dimensional_Minimizer::get_R() {
     double tmp = m * ((*right_point).first - (*left_point).first);
-    return tmp + (pow((*right_point).second.z - (*left_point).second.z, 2)
+    return tmp + (std::pow((*right_point).second.z - (*left_point).second.z, 2)
     / tmp) - 2 * ((*right_point).second.z + (*left_point).second.z);
 }
 
