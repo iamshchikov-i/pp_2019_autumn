@@ -1,11 +1,14 @@
-#ifndef MODULES_TASK_3_IAMSHCHIKOV_I_MINIMIZER_H__
-#define MODULES_TASK_3_IAMSHCHIKOV_I_MINIMIZER_H__
+// Copyright 2019 Iamshchikov Ivan
+#ifndef MODULES_TASK_3_IAMSHCHIKOV_I_MINIMIZER_MINIMIZER_H__
+#define MODULES_TASK_3_IAMSHCHIKOV_I_MINIMIZER_MINIMIZER_H__
 
 #include <mpi.h>
 #include <map>
 #include <queue>
 #include <algorithm>
 #include <iostream>
+#include <utility>
+#include <vector>
 
 struct point {
     double x;
@@ -23,7 +26,7 @@ struct characteristics {
     double z;
     double R;
     characteristics(double _z, double _R);
-    characteristics(double _R);
+    explicit characteristics(double _R);
 };
 
 struct interval {
@@ -41,7 +44,7 @@ struct CompareR {
 };
 
 class One_Dimensional_Minimizer {
-protected:
+ protected:
     std::map<double, characteristics>::iterator left_point;
     std::map<double, characteristics>::iterator right_point;
     double r_p;
@@ -70,10 +73,11 @@ protected:
     void compare_M(double new_point);
     void delete_containers();
     void do_first_iteration();
-public:
+
+ public:
     One_Dimensional_Minimizer(double _a, double _b, double _curr_x,
                               double(*f)(double x, double y),
-                              double _eps = 0.001, int _N_max = 500, 
+                              double _eps = 0.001, int _N_max = 500,
                               double _r_par = 2.0);
     void set_experiment(const double _a, const double _b, double _curr_x,
                         double(*f)(double x, double y),
@@ -83,23 +87,24 @@ public:
 };
 
 class Minimizer : public One_Dimensional_Minimizer {
-private:
+ private:
     bool valIsMin;
     double(*function) (double _x, double _y);
     double curr_y;
     double upper_y;
     int procrank;
     int procnum;
-    void do_first_iteration(One_Dimensional_Minimizer& odm, result& tmp_res);
+    void do_first_iteration(One_Dimensional_Minimizer* odm, result* tmp_res);
     void share_interval();
-public:
+
+ public:
     bool isMin();
     int get_procnum();
     int get_rank();
     void insert_to_map(double _x, double _y, double _z, double _R);
     result get_result();
     Minimizer(double _a, double _b, double _curr_y, double _upper_y,
-              double(*f)(double x, double y), double _eps = 0.001, 
+              double(*f)(double x, double y), double _eps = 0.001,
               int _N_max = 500, double _r_par = 2.0);
     void set_experiment(const double _a, const double _b, double _curr_y,
                         double _upper_y, double(*f)(double x, double y),
@@ -108,4 +113,4 @@ public:
     void solve();
 };
 
-#endif // MODULES_TASK_3_IAMSHCHIKOV_I_MINIMIZER_H__
+#endif  // MODULES_TASK_3_IAMSHCHIKOV_I_MINIMIZER_MINIMIZER_H__

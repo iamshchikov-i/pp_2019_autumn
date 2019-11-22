@@ -1,4 +1,8 @@
-#include "minimizer.h"
+// Copyright 2019 Iamshchikov Ivan
+
+#include <utility>
+#include <vector>
+#include "../../../modules/task_3/iamshchikov_i_minimizer/minimizer.h"
 
 point::point(double _x, double _y): x(_x), y(_y) {}
 
@@ -35,7 +39,7 @@ void One_Dimensional_Minimizer::go_new_left_interval(double new_point) {
 }
 
 double One_Dimensional_Minimizer::get_M() {
-    return abs(((*right_point).second.z - (*left_point).second.z) / 
+    return abs(((*right_point).second.z - (*left_point).second.z) /
                     ((*right_point).first - (*left_point).first));
 }
 
@@ -44,7 +48,7 @@ double One_Dimensional_Minimizer::get_m() {
         return r_p * M_Max;
     } else if (M_Max == 0) {
         return 1;
-    } else { 
+    } else {
         throw - 1;
     }
 }
@@ -72,7 +76,7 @@ void One_Dimensional_Minimizer::calculate_R(double new_point, double new_m) {
         }
     } else {
         go_new_left_interval(new_point);
-        for (int i = 0;i < 2;++i, go_Next_Interval()) {
+        for (int i = 0; i < 2; ++i, go_Next_Interval()) {
             (*left_point).second.R = get_R();
             pq->push(interval({ (*left_point).first, (*left_point).second.z },
                 { (*right_point).first, (*right_point).second.z },
@@ -99,7 +103,7 @@ void One_Dimensional_Minimizer::insert_to_map(double _y, double _z,
 void One_Dimensional_Minimizer::compare_interval_len(double new_point) {
     go_new_left_interval(new_point);
     double interval_length;
-    for (int i = 0;i < 2;++i, go_Next_Interval()) {
+    for (int i = 0; i < 2; ++i, go_Next_Interval()) {
         interval_length = (*right_point).first - (*left_point).first;
         if (interval_length < min_interval_length)
             min_interval_length = interval_length;
@@ -109,7 +113,7 @@ void One_Dimensional_Minimizer::compare_interval_len(double new_point) {
 void One_Dimensional_Minimizer::compare_M(double new_point) {
     go_new_left_interval(new_point);
     double M;
-    for (int i = 0;i < 2;++i, go_Next_Interval()) {
+    for (int i = 0; i < 2; ++i, go_Next_Interval()) {
         M = get_M();
         if (M >= M_Max)
             M_Max = M;
@@ -133,7 +137,7 @@ void One_Dimensional_Minimizer::do_first_iteration() {
         reset();
         M_Max = get_M();
         m = -1;
-        pq->push(interval({ (*left_point).first, (*left_point).second.z }, 
+        pq->push(interval({ (*left_point).first, (*left_point).second.z },
         { (*right_point).first, (*right_point).second.z }, 0));
     }
 }
@@ -191,21 +195,21 @@ Minimizer::Minimizer(double _a, double _b, double _curr_y, double _upper_y,
     valIsMin = false;
 }
 
-void Minimizer::do_first_iteration(One_Dimensional_Minimizer& odm,
-                                   result& tmp_res) {
+void Minimizer::do_first_iteration(One_Dimensional_Minimizer* odm,
+                                   result* tmp_res) {
     min_interval_length = b - a;
-    odm.set_experiment(curr_y, upper_y, a, function);
+    odm->set_experiment(curr_y, upper_y, a, function);
 
-    tmp_res = odm.solve();
+    *tmp_res = odm->solve();
     res.x = a;
-    res.y = tmp_res.y;
-    res.z = tmp_res.z;
+    res.y = tmp_res->y;
+    res.z = tmp_res->z;
     insert_to_map(res.x, res.y, res.z, 0);
 
     if (a != b) {
-        odm.set_experiment(curr_y, upper_y, b, function);
-        tmp_res = odm.solve();
-        insert_to_map(b, tmp_res.y, tmp_res.z, 0);
+        odm->set_experiment(curr_y, upper_y, b, function);
+        *tmp_res = odm->solve();
+        insert_to_map(b, tmp_res->y, tmp_res->z, 0);
 
         reset();
         M_Max = get_M();
@@ -268,13 +272,13 @@ void Minimizer::set_experiment(const double _a, const double _b,
 
 void Minimizer::solve() {
     double sendbuf, recvbuf;
-    One_Dimensional_Minimizer odm(0, 0, 0, nullptr);
+    One_Dimensional_Minimizer odm(0, 0, 0, nullptr), *podm = &odm;
     std::pair<double, double> new_point;
     double new_m;
-    result tmp_res;
+    result tmp_res, *ptmp_res = &tmp_res;
 
     share_interval();
-    do_first_iteration(odm, tmp_res);
+    do_first_iteration(podm, ptmp_res);
 
     while (min_interval_length > eps) {
         new_m = get_m();
@@ -291,6 +295,6 @@ void Minimizer::solve() {
 
     sendbuf = res.z;
     MPI_Allreduce(&sendbuf, &recvbuf, 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
-    if (res.z == recvbuf) 
+    if (res.z == recvbuf)
         valIsMin = true;
 }
