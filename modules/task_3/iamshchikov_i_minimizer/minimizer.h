@@ -2,6 +2,7 @@
 #ifndef MODULES_TASK_3_IAMSHCHIKOV_I_MINIMIZER_MINIMIZER_H__
 #define MODULES_TASK_3_IAMSHCHIKOV_I_MINIMIZER_MINIMIZER_H__
 
+#include <cmath>
 #include <mpi.h>
 #include <map>
 #include <queue>
